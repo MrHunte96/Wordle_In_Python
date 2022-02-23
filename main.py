@@ -1,7 +1,6 @@
 import pygame
 from guessTable import GuessTable
-from box import Box
-from row import Row
+from keyboardTable import KeyboardTable
 from typing import List
 
 def gameLoop():
@@ -14,11 +13,14 @@ def gameLoop():
     pygame.display.set_caption('Wordle')
 
     # Setup Font
-    Box.myfont = pygame.font.SysFont('Consolas', 40)
-
+    guessFont = pygame.font.SysFont('Consolas', 40)
+    keyboardFont = pygame.font.SysFont('Consolas', 20)
+    
     # Initialize Game
-    myGuessTable = GuessTable((60,60), 5, 5)
+    myGuessTable = GuessTable(guessFont, (60,60), 5, 5)
     myGuessTable.SetPos((100,80))
+    myKeyboardTable = KeyboardTable(keyboardFont, (40, 40))
+    myKeyboardTable.SetPos((30,550))
 
     run = True
     while run:
@@ -36,6 +38,7 @@ def gameLoop():
             
         surface.fill((0,0,0))
         myGuessTable.Draw(surface)
+        myKeyboardTable.Draw(surface)
 
         # Update screen
         pygame.display.update()
