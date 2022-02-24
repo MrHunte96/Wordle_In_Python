@@ -2,10 +2,11 @@ from turtle import bgcolor
 import pygame
 
 class CharState:
-    PENDING = 0
-    INCORRECT = 1
-    WRONG_POS = 2
-    RIGHT_POS = 3
+    INACTIVE = 0
+    PENDING = 1
+    INCORRECT = 2
+    WRONG_POS = 3
+    RIGHT_POS = 4
 
 class Box:
     def __init__(self):
@@ -17,10 +18,10 @@ class Box:
         self.offsetSize = (20,8)
         self.boxSize = (10,10)
         self.bgCol = (255,255,255)
-        self.state = CharState.PENDING
+        self.state = CharState.INACTIVE
         self.outlineWidth = 0
 
-    def Config(self, font, fontcol = (255,255,255), pos = (0,0), size = (50, 50), state : CharState = CharState.PENDING):
+    def Config(self, font, fontcol = (255,255,255), pos = (0,0), size = (50, 50), state : CharState = CharState.INACTIVE):
         self.SetFont(font)
         self.SetFontColor(fontcol)
         self.SetPos(pos)
@@ -40,7 +41,10 @@ class Box:
 
     def SetState(self, state : CharState):
         self.state = state
-        if self.state == CharState.PENDING:
+        if self.state == CharState.INACTIVE:
+            self.bgCol = (100,100,100) # White
+            self.outlineWidth = 1
+        elif self.state == CharState.PENDING:
             self.bgCol = (200,200,200) # White
             self.outlineWidth = 2
         elif self.state == CharState.INCORRECT:
@@ -62,7 +66,7 @@ class Box:
 
     def Reset(self):
         self.SetChar(' ')
-        self.SetState(CharState.PENDING)
+        self.SetState(CharState.INACTIVE)
 
     def Draw(self, surface):
         pygame.draw.rect(surface, self.bgCol, pygame.Rect(self.position[0], self.position[1], self.boxSize[0], self.boxSize[1]), self.outlineWidth)

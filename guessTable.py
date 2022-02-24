@@ -14,6 +14,7 @@ class GuessTable:
         self.guessTable : List[Row] = []
         for _ in range(maxguesstries):
             self.guessTable.append(Row(boxSize, numofletters, font))
+        self.guessTable[self.guessNum].SetState(CharState.PENDING)
 
     def SetPos(self, pos):
         for row in self.guessTable:
@@ -50,6 +51,8 @@ class GuessTable:
         # All Correct
         if correctCount == GuessTable.NUM_OF_LETTERS or self.guessNum >= GuessTable.MAX_GUESS_TRIES:
             self.ended = True
+        else:
+            self.guessTable[self.guessNum].SetState(CharState.PENDING)
         
 
     def InsertLetter(self, letter : str):
@@ -63,6 +66,10 @@ class GuessTable:
             self.guessTable[self.guessNum].boxList[len(self.guessStr)].SetChar(' ')
 
     def __Clear(self):
+        self.ended = False
+        self.guessStr = ''
+        self.guessNum = 0
         for r in self.guessTable:
-            for b in r.boxList:
-                b.Reset()
+            r.Reset()
+        self.guessTable[self.guessNum].SetState(CharState.PENDING)
+        
