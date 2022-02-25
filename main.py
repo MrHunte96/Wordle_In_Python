@@ -32,9 +32,17 @@ def gameLoop():
                 if event.key == pygame.K_BACKSPACE:
                     myGuessTable.RemoveLetter()
                 elif event.key == pygame.K_RETURN:
-                    myGuessTable.CheckGuess("ASDFG".upper())
+                    checkedRow = myGuessTable.CheckGuess("ASDFG".upper())
+                    if checkedRow != None:
+                        myKeyboardTable.UpdateCheckedRow(checkedRow)
+                    else:
+                        myKeyboardTable.Reset()
                 elif event.key >= pygame.K_a and event.key <= pygame.K_z:
                     myGuessTable.InsertLetter(pygame.key.name(event.key).upper())
+                    myKeyboardTable.KeyDown(pygame.key.name(event.key).upper())
+            elif event.type == pygame.KEYUP:
+                if event.key >= pygame.K_a and event.key <= pygame.K_z:
+                    myKeyboardTable.KeyUp(pygame.key.name(event.key).upper())
             
         surface.fill((0,0,0))
         myGuessTable.Draw(surface)

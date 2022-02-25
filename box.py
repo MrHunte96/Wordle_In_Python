@@ -19,6 +19,7 @@ class Box:
         self.boxSize = (10,10)
         self.bgCol = (255,255,255)
         self.state = CharState.INACTIVE
+        self.prevState = CharState.INACTIVE
         self.outlineWidth = 0
 
     def Config(self, font, fontcol = (255,255,255), pos = (0,0), size = (50, 50), state : CharState = CharState.INACTIVE):
@@ -40,6 +41,7 @@ class Box:
         self.offsetSize = (size[0] / 2 - self.myfont.get_height() / 4, size[1] / 2 - self.myfont.get_height() / 2.5)
 
     def SetState(self, state : CharState):
+        self.prevState = self.state
         self.state = state
         if self.state == CharState.INACTIVE:
             self.bgCol = (100,100,100) # White
@@ -56,6 +58,9 @@ class Box:
         elif self.state == CharState.RIGHT_POS:
             self.bgCol = (32,204,32) # Green
             self.outlineWidth = 0
+
+    def RevertState(self):
+        self.SetState(self.prevState)
 
     def SetChar(self, char):
         self.character = char

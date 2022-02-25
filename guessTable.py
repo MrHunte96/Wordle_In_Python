@@ -25,10 +25,14 @@ class GuessTable:
         for row in self.guessTable:
             row.Draw(surface)
 
-    def CheckGuess(self, answer : str) -> bool:
+    def CheckGuess(self, answer : str) -> Row:
         if self.ended:
             self.__Clear()
             return
+
+        letterCount = [0] * 26
+        for c in answer:
+            letterCount[ord('Z') - ord(c)] += 1
 
         correctCount = 0
         # Check if all letters are filled
@@ -37,13 +41,16 @@ class GuessTable:
             for c in self.guessTable[self.guessNum].boxList:
                 if c.character == answer[i]:
                     c.SetState(CharState.RIGHT_POS)
+                    letterCount[ord('Z') - ord(c.character)] -= 1
                     correctCount += 1
                 else:
                     c.SetState(CharState.INCORRECT)
-                    for a in answer:
-                        if c.character == a:
-                            c.SetState(CharState.WRONG_POS)
-                            break
+                    if letterCount[ord('Z') - ord(c.character)] > 0:
+                        for a in answer:
+                            if c.character == a:
+                                c.SetState(CharState.WRONG_POS)
+                                letterCount[ord('Z') - ord(a)] -= 1
+                                break
                 i += 1
             # Reset guess
             self.guessNum += 1
@@ -53,6 +60,7 @@ class GuessTable:
             self.ended = True
         else:
             self.guessTable[self.guessNum].SetState(CharState.PENDING)
+        return self.guessTable[self.guessNum - 1]
         
 
     def InsertLetter(self, letter : str):
