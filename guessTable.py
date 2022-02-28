@@ -4,7 +4,7 @@ from box import Box, CharState
 
 class GuessTable:
     NUM_OF_LETTERS = 5
-    MAX_GUESS_TRIES = 5
+    MAX_GUESS_TRIES = 6
     def __init__(self, font, boxSize, numofletters, maxguesstries):
         GuessTable.NUM_OF_LETTERS = numofletters
         GuessTable.MAX_GUESS_TRIES = maxguesstries
@@ -62,7 +62,9 @@ class GuessTable:
             self.guessTable[self.guessNum].SetState(CharState.PENDING)
         return self.guessTable[self.guessNum - 1]
         
-
+    def GetWord(self) -> str:
+        return self.guessStr
+        
     def InsertLetter(self, letter : str):
         if len(self.guessStr) < GuessTable.NUM_OF_LETTERS:
             self.guessTable[self.guessNum].boxList[len(self.guessStr)].SetChar(letter)
