@@ -8,7 +8,6 @@ class GuessTable:
     def __init__(self, font, boxSize, numofletters, maxguesstries):
         GuessTable.NUM_OF_LETTERS = numofletters
         GuessTable.MAX_GUESS_TRIES = maxguesstries
-        self.ended = False
         self.guessStr = ''
         self.guessNum = 0
         self.guessTable : List[Row] = []
@@ -25,46 +24,38 @@ class GuessTable:
         for row in self.guessTable:
             row.Draw(surface)
 
-    def CheckGuess(self, answer : str) -> Row:
-        if self.ended:
-            self.__Clear()
-            return
+    def CheckIfFilled(self) -> bool:
+        return len(self.guessStr) == GuessTable.NUM_OF_LETTERS
 
+    def CheckGuess(self, answer : str) -> bool:
         letterCount = [0] * 26
         for c in answer:
             letterCount[ord('Z') - ord(c)] += 1
 
         correctCount = 0
-        # Check if all letters are filled
-        if len(self.guessStr) == GuessTable.NUM_OF_LETTERS:
-            i = 0
-            for c in self.guessTable[self.guessNum].boxList:
-                if c.character == answer[i]:
-                    c.SetState(CharState.RIGHT_POS)
-                    letterCount[ord('Z') - ord(c.character)] -= 1
-                    correctCount += 1
-                else:
-                    c.SetState(CharState.INCORRECT)
-                    if letterCount[ord('Z') - ord(c.character)] > 0:
-                        for a in answer:
-                            if c.character == a:
-                                c.SetState(CharState.WRONG_POS)
-                                letterCount[ord('Z') - ord(a)] -= 1
-                                break
-                i += 1
-            # Reset guess
-            self.guessNum += 1
-            self.guessStr = ''
-        # All Correct
-        if correctCount == GuessTable.NUM_OF_LETTERS or self.guessNum >= GuessTable.MAX_GUESS_TRIES:
-            self.ended = True
-        else:
-            self.guessTable[self.guessNum].SetState(CharState.PENDING)
-        return self.guessTable[self.guessNum - 1]
+        i = 0
+        for c in self.guessTable[self.guessNum].boxList:
+            if c.character == answer[i]:
+                c.SetState(CharState.RIGHT_POS)
+                letterCount[ord('Z') - ord(c.character)] -= 1
+                correctCount += 1
+            else:
+                c.SetState(CharState.INCORRECT)
+                if letterCount[ord('Z') - ord(c.character)] > 0:
+                    for a in answer:
+                        if c.character == a:
+                            c.SetState(CharState.WRONG_POS)
+                            letterCount[ord('Z') - ord(a)] -= 1
+                            break
+            i += 1
+        return correctCount == GuessTable.NUM_OF_LETTERS
         
     def GetWord(self) -> str:
         return self.guessStr
-        
+
+    def GetRow(self) -> Row:
+        return self.guessTable[self.guessNum]
+
     def InsertLetter(self, letter : str):
         if len(self.guessStr) < GuessTable.NUM_OF_LETTERS:
             self.guessTable[self.guessNum].boxList[len(self.guessStr)].SetChar(letter)
@@ -75,8 +66,16 @@ class GuessTable:
             self.guessStr = self.guessStr[0:len(self.guessStr)-1]
             self.guessTable[self.guessNum].boxList[len(self.guessStr)].SetChar(' ')
 
-    def __Clear(self):
-        self.ended = False
+    def NextGuess(self):
+        self.guessNum += 1
+        self.guessStr = ''
+        if self.guessNum < self.MAX_GUESS_TRIES:
+            self.guessTable[self.guessNum].SetState(CharState.PENDING)
+            return True
+        else:
+            return False
+
+    def Clear(self):
         self.guessStr = ''
         self.guessNum = 0
         for r in self.guessTable:

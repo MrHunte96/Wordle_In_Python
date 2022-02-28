@@ -1,4 +1,3 @@
-from turtle import bgcolor
 import pygame
 
 class CharState:
