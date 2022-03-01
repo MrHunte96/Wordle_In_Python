@@ -13,6 +13,7 @@ def gameLoop():
     # Setup window
     surface = pygame.display.set_mode((512,768))
     pygame.display.set_caption('myWordle')
+    logoTex = pygame.image.load("Logo1.png", "Logo")
 
     # Setup Font
     guessFont = pygame.font.SysFont('Consolas', 40)
@@ -21,7 +22,7 @@ def gameLoop():
     
     # Initialize Game
     myGuessTable = GuessTable(guessFont, (60,60), 5, 6)
-    myGuessTable.SetPos((100,80))
+    myGuessTable.SetPos((90,80))
     myKeyboardTable = KeyboardTable(keyboardFont, (40, 40))
     myKeyboardTable.SetPos((30,550))
     myLogger = Logger()
@@ -78,6 +79,7 @@ def gameLoop():
                     myKeyboardTable.KeyUp(pygame.key.name(event.key).upper())
             
         surface.fill((0,0,0))
+        DrawLogo(surface, logoTex)
         myGuessTable.Draw(surface)
         myKeyboardTable.Draw(surface)
         myLogger.Draw(surface)
@@ -92,6 +94,9 @@ def FindRandomWord(wordlist : List[str]):
     ans = wordlist[r.randint(0, len(wordlist)-1)]
     print ( "Answer : [", ans, "]")
     return ans
+
+def DrawLogo(surface : pygame.Surface, logo : pygame.Surface):
+    surface.blit(pygame.transform.scale(logo, (200,100)), (150,-10))
 
 if __name__ == '__main__':
     gameLoop()
