@@ -13,7 +13,7 @@ def gameLoop():
     # Setup window
     surface = pygame.display.set_mode((512,768))
     pygame.display.set_caption('myWordle')
-    logoTex = pygame.image.load("Logo1.png", "Logo")
+    logoTex = pygame.image.load("Assets\\Logo1.png", "Logo")
 
     # Setup Font
     guessFont = pygame.font.SysFont('Consolas', 40)
@@ -31,7 +31,7 @@ def gameLoop():
 
     # Initialize word list
     wordlist : List[str] = []
-    with open("sgb-words.txt", 'r') as f:
+    with open("Assets\\sgb-words.txt", 'r') as f:
         wordlist = f.readlines()
     for i in range(len(wordlist)):
         wordlist[i] = wordlist[i][0:GuessTable.NUM_OF_LETTERS].upper()
