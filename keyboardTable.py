@@ -19,7 +19,7 @@ class KeyboardTable:
     def UpdateCheckedRow(self, row : Row):
         for box in row.boxList:
             def func(b : Box):
-                if b.state != CharState.RIGHT_POS or (b.state == CharState.WRONG_POS and box.state != CharState.RIGHT_POS):
+                if b.state != CharState.RIGHT_POS and not (b.state == CharState.WRONG_POS and box.state == CharState.INCORRECT):
                     b.SetState(box.state)
             self.__FindKeyAndApply(box.character, func)
 
