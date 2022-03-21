@@ -1,4 +1,4 @@
-[![Game Title](https://github.com/MrHunte96/Wordle_In_Python/blob/main/Assets/Logo2.png)](https://youtu.be/5MWIdxxEp7o "Wordle in Python (Simple)")
+[![Game Title](https://github.com/MrHunte96/Wordle_In_Python/blob/main/Assets/Logo2.png)](https://youtu.be/NZAffJDxBNQ "Wordle in Python (Simple)")
 
 # How to run application in Python
 ### Installing dependency
